@@ -5,19 +5,15 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
+// CORS 정책 완전 보완
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST'],
-  credentials: false
+  methods: ['GET', 'POST', 'OPTIONS'],  // preflight 요청까지 명시
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
 }));
 
+// OPTIONS 요청 직접 응답
+app.options('*', cors());
 // Use environment variables for database URL
 const dbUri = process.env.DB_URI;
 
